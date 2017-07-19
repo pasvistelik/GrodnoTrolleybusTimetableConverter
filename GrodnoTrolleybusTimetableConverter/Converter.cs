@@ -186,7 +186,7 @@ namespace GrodnoTrolleybusTimetableConverter
                     ObservableCollection<Table> t = new ObservableCollection<Table>();
                     t.Add(workingTable);
                     t.Add(weekTable);
-                    Timetable tbl = new Timetable(TableType.table, t);
+                    Timetable tbl = new Timetable(null, null, TableType.table, t);
                     fullTable[k - 1].Add(tbl);
 
                     timetables[k - 1].Add(tbl);
@@ -198,7 +198,7 @@ namespace GrodnoTrolleybusTimetableConverter
                     ObservableCollection<Table> t2 = new ObservableCollection<Table>();
                     t2.Add(workingTableToDepo);
                     t2.Add(weekTableToDepo);
-                    Timetable tbl2 = new Timetable(TableType.table, t2);
+                    Timetable tbl2 = new Timetable(null, null, TableType.table, t2);
                     fullTable_depo[k - 1].Add(tbl2);
 
                     timetables[k - 1].Add(tbl2);
