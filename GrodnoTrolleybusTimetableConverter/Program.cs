@@ -20,31 +20,29 @@ namespace GrodnoTrolleybusTimetableConverter
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "Выберите файлы с расписанием";
-            ofd.Filter =  "Расписание в формате xls|*.xls";
+            ofd.Filter = "Расписание в формате xlsx|*.xlsx";
             ofd.InitialDirectory = @"D:\Files\Other\Projects\PublicTransport\Converters\GrodnoTrolleybusTimetable";//AppDomain.CurrentDomain.BaseDirectory;
-            ofd.Multiselect = true;
+            //ofd.Multiselect = true;
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                dynamic convertation_result = new ExpandoObject();
-                convertation_result.transport_company_name = "Гродненское троллейбусное управление";
-                convertation_result.area_name = "Гродно";
-                convertation_result.routes = new List<dynamic>();
 
-                List<Thread> threads = new List<Thread>();
+                dynamic convertation_result = null;
+                /*List<Thread> threads = new List<Thread>();
                 for (int i = 0, n = ofd.FileNames.Length, processorCount = Environment.ProcessorCount; i < processorCount; i++)
                 {
                     Thread tr = new Thread(delegate ()
                     {
                         for (int j = i; j < n; j += processorCount)
-                        {
-                            convertation_result.routes.Add(Converter.Convert(ofd.FileNames[j]));
-                        }
+                        {*/
+                //for (int k = 2, n = ObjWorkBook.Sheets.Count; k <= n; k++);
+                convertation_result = TrolleybusesTimetableOfOperarorConverter.Convert(ofd.FileName/*s[j]*/);
+                        /*}
                     });
-                    
+
                     threads.Add(tr);
                     tr.Start();
                     tr.Join();
-                }
+                }*/
 
 
                 StreamWriter new_fullTableSW = new StreamWriter(new FileStream(ofd.InitialDirectory + @"\" + "NEW_Grodno_trolleybuses.json", FileMode.Create, FileAccess.Write));
