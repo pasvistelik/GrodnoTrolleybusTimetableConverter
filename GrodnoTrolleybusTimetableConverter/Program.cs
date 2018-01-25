@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +25,11 @@ namespace GrodnoTrolleybusTimetableConverter
             ofd.Multiselect = true;
             if (ofd.ShowDialog() == DialogResult.OK)
             {
+                dynamic convertation_result = new ExpandoObject();
+                convertation_result.transport_company_name = "Гродненское троллейбусное управление";
+                convertation_result.area_name = "Гродно";
+                convertation_result.routes = new List<dynamic>();
+
                 List<Thread> threads = new List<Thread>();
                 for (int i = 0, n = ofd.FileNames.Length, processorCount = Environment.ProcessorCount; i < processorCount; i++)
                 {
@@ -29,7 +37,7 @@ namespace GrodnoTrolleybusTimetableConverter
                     {
                         for (int j = i; j < n; j += processorCount)
                         {
-                            Converter.Convert(ofd.FileNames[j]);
+                            convertation_result.routes.Add(Converter.Convert(ofd.FileNames[j]));
                         }
                     });
                     
@@ -37,6 +45,14 @@ namespace GrodnoTrolleybusTimetableConverter
                     tr.Start();
                     tr.Join();
                 }
+
+
+                StreamWriter new_fullTableSW = new StreamWriter(new FileStream(ofd.InitialDirectory + @"\" + "NEW_Grodno_trolleybuses.json", FileMode.Create, FileAccess.Write));
+                new_fullTableSW.Write(JsonConvert.SerializeObject(convertation_result));
+                new_fullTableSW.Close();
+
+
+
                 //foreach (Thread tr in threads) tr.Join();
                 //List<string> timetablesJSON = new List<string>();
                 /*foreach (string filepath in ofd.FileNames)
